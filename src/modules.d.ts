@@ -112,6 +112,7 @@ declare module 'electron' {
         isFullScreen(): boolean;
         isMaximized(): boolean;
         isMinimized(): boolean;
+        isUserMovementEnabled: () => boolean;
         isVisible(): boolean;
         maximize(): void;
         minimize(): void;
