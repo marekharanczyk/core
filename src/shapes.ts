@@ -443,6 +443,7 @@ export interface ExternalWindow extends BrowserWindowElectron {
     _options: {
         uuid?: string;
         name?: string;
+        frame?: boolean;
     };
     _window?: {};
     app_uuid?: string;
