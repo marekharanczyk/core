@@ -676,10 +676,14 @@ exports.System = {
         });
     },
     getAllExternalWindows: function() {
-        const skipOwnWindows = false;
+        const skipOwnWindows = true;
         const nativeWindows = [];
         const allNativeWindows = electronApp.getAllNativeWindowInfo(skipOwnWindows);
         const classNamesToIgnore = [
+            // TODO: Edge, calculator, etc (looks like they are always 
+            // "opened" and "visible", but at least visiblity part is wrong)
+            'ApplicationFrameWindow',
+
             'Windows.UI.Core.CoreWindow'
         ];
         const titlesToIgnore = [

@@ -15,6 +15,7 @@ export const ExternalWindowApiMap: APIHandlerMap = {
   'get-external-window-bounds': getExternalWindowBounds,
   'get-external-window-group': getExternalWindowGroup,
   'get-external-window-info': getExternalWindowInfo,
+  'get-external-window-options': getExternalWindowOptions,
   'get-external-window-state': getExternalWindowState,
   'hide-external-window': hideExternalWindow,
   'is-external-window-showing': isExternalWindowShowing,
@@ -33,7 +34,8 @@ export const ExternalWindowApiMap: APIHandlerMap = {
   'set-external-window-bounds': setExternalWindowBounds,
   'show-external-window-at': showExternalWindowAt,
   'show-external-window': showExternalWindow,
-  'stop-external-window-flashing': stopExternalWindowFlashing
+  'stop-external-window-flashing': stopExternalWindowFlashing,
+  'update-external-window-options': updateExternalWindowOptions
 };
 
 export function init(): void {
@@ -102,6 +104,12 @@ async function getExternalWindowInfo(identity: Identity, message: APIMessage) {
   const { payload } = message;
   const targetIdentity = getTargetExternalWindowIdentity(payload);
   return ExternalWindow.getExternalWindowInfo(targetIdentity);
+}
+
+async function getExternalWindowOptions(identity: Identity, message: APIMessage) {
+  const { payload } = message;
+  const targetIdentity = getTargetExternalWindowIdentity(payload);
+  return ExternalWindow.getExternalWindowOptions(targetIdentity);
 }
 
 async function getExternalWindowState(identity: Identity, message: APIMessage) {
@@ -224,4 +232,11 @@ async function stopExternalWindowFlashing(identity: Identity, message: APIMessag
   const { payload } = message;
   const targetIdentity = getTargetExternalWindowIdentity(payload);
   return ExternalWindow.stopExternalWindowFlashing(targetIdentity);
+}
+
+async function updateExternalWindowOptions(identity: Identity, message: APIMessage) {
+  const { payload } = message;
+  const { options } = payload;
+  const targetIdentity = getTargetExternalWindowIdentity(payload);
+  return ExternalWindow.updateExternalWindowOptions(targetIdentity, options);
 }
