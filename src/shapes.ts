@@ -464,6 +464,7 @@ export interface RawNativeWindowInfo {
     alwaysOnTop: boolean;
     bounds: Bounds;
     className: string;
+    dpi: number;
     focused: boolean;
     id: string;
     maximized: boolean;
