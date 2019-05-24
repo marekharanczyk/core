@@ -1193,7 +1193,7 @@ Window.executeJavascript = function(identity, code, callback = () => {}) {
         return;
     }
 
-    browserWindow.webContents.executeJavaScript(code, true, (result) => {
+    browserWindow.webContents.executeJavaScript(code, true).then(result => {
         callback(undefined, result);
     });
 };

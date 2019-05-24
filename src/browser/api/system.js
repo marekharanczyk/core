@@ -165,12 +165,7 @@ exports.System = {
         electronApp.vlog(1, `clearCache ${JSON.stringify(storages)}`);
         clearCacheInvoked(true);
 
-        defaultSession.clearCache(() => {
-            defaultSession.clearStorageData(cacheOptions, () => {
-                resolve();
-            });
-        });
-
+        defaultSession.clearCache().then(() => defaultSession.clearStorageData(cacheOptions)).then(resolve);
 
     },
     createProxySocket: function(options, callback, errorCallback) {
