@@ -13,6 +13,7 @@ import route from '../../common/route';
 import WindowGroups, { GroupChangedEvent, GroupEvent } from '../window_groups';
 import ProcessTracker from '../process_tracker';
 import SubscriptionManager from '../subscription_manager';
+import { writeToLog } from '../log';
 
 electronApp.on('ready', () => {
   subToGlobalWinEventHooks();
@@ -431,6 +432,7 @@ function subToGlobalWinEventHooks(): void {
 */
 function subscribeToWinEventHooks(externalWindow: Shapes.ExternalWindow): void {
   const { nativeId } = externalWindow;
+  writeToLog('info', nativeId);
   const pid = electronApp.getProcessIdForNativeId(nativeId);
   const key = getKey(externalWindow);
   const winEventHooks = new WinEventHookEmitter({ pid });
@@ -447,7 +449,6 @@ function subscribeToWinEventHooks(externalWindow: Shapes.ExternalWindow): void {
     idChild: string
   ): void => {
     const nativeWindowInfo = getNativeWindowInfo(rawNativeWindowInfo);
-
     // We are subscribing to a process, so we only care about a specific window.
     // idChild === '0' indicates that event is from main window, not a subcomponent.
     if (nativeWindowInfo.uuid !== nativeId || idChild !== '0') {
@@ -460,15 +461,12 @@ function subscribeToWinEventHooks(externalWindow: Shapes.ExternalWindow): void {
   winEventHooks.on('EVENT_OBJECT_SHOW', listener.bind(null, () => {
     externalWindow.emit('shown');
   }));
-
   winEventHooks.on('EVENT_OBJECT_HIDE', listener.bind(null, () => {
     externalWindow.emit('hidden', { reason: 'hide' });
   }));
-
   winEventHooks.on('EVENT_OBJECT_DESTROY', listener.bind(null, () => {
     externalWindowCloseCleanup(externalWindow);
   }));
-
   winEventHooks.on('EVENT_OBJECT_FOCUS', listener.bind(null, () => {
     externalWindow.emit('focused');
   }));
@@ -693,7 +691,7 @@ function externalWindowCloseCleanup(externalWindow: Shapes.ExternalWindow): void
 
   externalWindow.emit('closed');
   externalWindow.removeAllListeners();
-  externalWindows.delete(nativeId);
+  externalWindows.delete(key);
 }
 
 /*
